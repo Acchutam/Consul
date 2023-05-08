@@ -6,6 +6,7 @@ import com.User.service.RatingService;
 import com.User.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,16 +20,19 @@ public class UserController {
     @Autowired
     private RatingService ratingService;
 
+    private RestTemplate restTemplate = new RestTemplate();
+
     @GetMapping(value = "/users")
     public List<User> getAll(){
         return userService.getAll();
     }
 
+
     @GetMapping(value = "/users/id/{id}")
     public Optional<User> getById(@PathVariable int id){
         Optional<User> user = userService.getById(id);
-
         user.get().setRating(ratingService.getAllRatingsByUserId(user.get().getId()));
+       // user.get().setRating(restTemplate.getForObject("http://RATING-SERVICE/"));
         return user;
 
     }
@@ -45,7 +49,9 @@ public class UserController {
 
     @GetMapping(value = "/checkFeign")
     public String check(){
-        return ratingService.rating();
+
+        //return ratingService.rating();
+         return restTemplate.getForObject("http://RATING-SERVICE/ratingDemo",String.class);
     }
 
 

@@ -18,15 +18,12 @@ spring:
           uri: lb://RATING-SERVICE
           predicates:
             - Path=/ratings/**
-          filters:
-                - AuthenticationFilter
 
         - id: SERIES-SERVICE
           uri: lb://SERIES-SERVICE
           predicates:
             - Path=/api/series/**
-          filters:
-            - AuthenticationFilter
+
 
         - id: IDENTITY-SERVICE
           uri: lb://IDENTITY-SERVICE
@@ -36,4 +33,6 @@ spring:
     consul:
       host: localhost
       port: 8500
-
+management:
+  security:
+    enabled: false
